@@ -23,6 +23,9 @@ Edit the appropriate columns -- you're making two edits -- and the NULL rows wil
 All the other rows will remain the same. */
 --QUERY 1
 
+SELECT 
+product_name || ', ' || coalesce(product_size, '')|| ' (' || coalesce(product_qty_type, 'unit') || ')'
+FROM product
 
 
 
@@ -41,6 +44,13 @@ HINT: One of these approaches uses ROW_NUMBER() and one uses DENSE_RANK().
 Filter the visits to dates before April 29, 2022. */
 --QUERY 2
 
+SELECT DISTINCT
+customer_id
+,market_date
+,DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY  market_date ASC) as visit_number
+FROM customer_purchases
+
+WHERE market_date < '2022-04-29'
 
 
 
@@ -53,6 +63,18 @@ only the customer’s most recent visit.
 HINT: Do not use the previous visit dates filter. */
 --QUERY 3
 
+SELECT x.*
+
+FROM
+(
+	SELECT DISTINCT
+	customer_id
+	,market_date
+	,DENSE_RANK() OVER(PARTITION BY customer_id ORDER BY  market_date DESC) as visit_number
+	FROM customer_purchases
+	) x
+
+WHERE x.visit_number = 1
 
 
 
@@ -66,6 +88,15 @@ You can make this a running count by including an ORDER BY within the PARTITION 
 Filter the visits to dates before April 29, 2022. */
 --QUERY 4
 
+SELECT 
+customer_id
+,product_id
+,market_date
+,COUNT(product_id) OVER(PARTITION BY customer_id, product_id) as times_purchased
+
+FROM customer_purchases
+
+WHERE market_date < '2022-04-29'
 
 
 
@@ -85,7 +116,12 @@ Remove any trailing or leading whitespaces. Don't just use a case statement for 
 Hint: you might need to use INSTR(product_name,'-') to find the hyphens. INSTR will help split the column. */
 --QUERY 5
 
-
+SELECT 
+product_name
+, CASE WHEN INSTR(product_name, '-') > 0 THEN SUBSTR(product_name, (INSTR(product_name, '-')+1)) 
+	ELSE NULL
+	END AS description
+FROM product
 
 
 --END QUERY
