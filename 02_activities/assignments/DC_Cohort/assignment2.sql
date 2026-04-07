@@ -149,6 +149,33 @@ HINT: There are a possibly a few ways to do this query, but if you're struggling
 with a UNION binding them. */
 --QUERY 7
 
+WITH sales_by_date AS (
+	SELECT 
+	market_date
+	,SUM(quantity*cost_to_customer_per_qty) as sales
+FROM customer_purchases
+GROUP BY market_date
+)
+,
+best_day AS (
+	SELECT *
+	FROM sales_by_date
+	ORDER BY sales DESC LIMIT 1
+)
+,
+worst_day AS (
+	SELECT *
+	FROM sales_by_date
+	ORDER BY sales ASC LIMIT 1
+)
+
+SELECT *
+FROM worst_day
+
+UNION
+
+SELECT *
+FROM best_day
 
 
 
@@ -170,7 +197,23 @@ How many customers are there (y).
 Before your final group by you should have the product of those two queries (x*y).  */
 --QUERY 8
 
+WITH products AS (
+	SELECT 
+	vendor_id
+	,product_id
+	,ROW_NUMBER() OVER(PARTITION BY vi.vendor_id, vi.product_id ORDER BY market_date DESC) as ranking
+	
+   FROM vendor_inventory 
+   WHERE ranking = 1
+),
+WITH product_vendor_names AS (
+	SELECT v.vendor_name, p.product_name
+	FROM products vi
+	JOIN vendor v ON v.vendor_id = vi.vendor_id
+	JOIN product p ON p.product_id = vi.product_id
+)
 
+SELECT * FROM products
 
 
 --END QUERY
