@@ -130,7 +130,9 @@ FROM product
 /* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
 --QUERY 6
 
-
+SELECT *
+FROM product
+WHERE product_size REGEXP '[0-9]'
 
 
 --END QUERY
