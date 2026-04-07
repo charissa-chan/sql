@@ -199,21 +199,26 @@ Before your final group by you should have the product of those two queries (x*y
 
 WITH products AS (
 	SELECT 
-	vendor_id
-	,product_id
-	,ROW_NUMBER() OVER(PARTITION BY vi.vendor_id, vi.product_id ORDER BY market_date DESC) as ranking
+	vendor_name
+	,product_name
+	,vi.original_price
 	
-   FROM vendor_inventory 
-   WHERE ranking = 1
-),
-WITH product_vendor_names AS (
-	SELECT v.vendor_name, p.product_name
-	FROM products vi
-	JOIN vendor v ON v.vendor_id = vi.vendor_id
-	JOIN product p ON p.product_id = vi.product_id
+   FROM vendor_inventory vi
+   JOIN vendor v ON v.vendor_id = vi.vendor_id
+   JOIN product p ON p.product_id = vi.product_id
+	GROUP BY vi.vendor_id, vi.product_id
 )
-
-SELECT * FROM products
+,
+customer_count AS (
+	SELECT COUNT (*) AS total_customers
+	FROM customer
+)
+	SELECT * 
+	,(original_price*total_customers*5) AS total_per_product
+	
+	FROM products
+	CROSS JOIN customer_count
+	
 
 
 --END QUERY
@@ -226,8 +231,15 @@ It should use all of the columns from the product table, as well as a new column
 Name the timestamp column `snapshot_timestamp`. */
 --QUERY 9
 
-
-
+DROP TABLE IF EXISTS temp.product_units;
+CREATE TEMP TABLE product_units AS
+	SELECT *
+	,CURRENT_TIMESTAMP AS snapshot_timestamp
+	FROM product
+	WHERE product_qty_type = 'unit';
+	
+SELECT *
+FROM temp.product_units
 
 --END QUERY
 
@@ -236,8 +248,11 @@ Name the timestamp column `snapshot_timestamp`. */
 This can be any product you desire (e.g. add another record for Apple Pie). */
 --QUERY 10
 
+INSERT INTO product_units
+VALUES(24,'Blueberry Pie', '10"', 3, 'unit', CURRENT_TIMESTAMP);
 
-
+SELECT *
+FROM product_units
 
 --END QUERY
 
@@ -248,6 +263,11 @@ This can be any product you desire (e.g. add another record for Apple Pie). */
 HINT: If you don't specify a WHERE clause, you are going to have a bad time.*/
 --QUERY 11
 
+DELETE FROM product_units
+WHERE product_id = 24;
+
+SELECT * 
+FROM product_units
 
 
 
@@ -272,6 +292,18 @@ Finally, make sure you have a WHERE statement to update the right row,
 When you have all of these components, you can run the update statement. */
 --QUERY 12
 
+ALTER TABLE product_units
+ADD current_quantity INT;
+
+UPDATE product_units 
+SET current_quantity = (
+	coalesce((SELECT quantity
+	FROM vendor_inventory
+	WHERE product_units.product_id = vendor_inventory.product_id
+	ORDER BY market_date DESC),0)
+);
+SELECT *
+FROM product_units
 
 
 
