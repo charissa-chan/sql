@@ -56,7 +56,13 @@ The store wants to keep customer addresses. Propose two architectures for the CU
 **HINT:** search type 1 vs type 2 slowly changing dimensions. 
 
 ```
-Your answer...
+The first option, in which the store does not need to retain a history of changes, is a type 1 slowly changing dimension. 
+In this case, I would set customer_ID as PK. With each change in address, use an UPDATE statement to change existing 
+record (which are the street address, city, province/state, and postal code columns) to customer's new address.
+
+The second option, in which the store wants to keep a history of changes in customer addresses, is a type 2 slowly 
+changing dimension. In this case, I would set customer_address_ID as PK. With each change in address, use an INSERT 
+statement to add new record (new row) with new address information.
 ```
 
 ***
@@ -191,5 +197,25 @@ Consider, for example, concepts of labour, bias, LLM proliferation, moderating c
 
 
 ```
-Your thoughts...
+The article foregrounds the invisible human labor behind the successful compilation of large databases. It strikes me that
+one person can get all the credit for the work of many others. Behind the success of Li and her team, who receive fame and recognition for compiling their massive dataset, is the labor of unrecognized thousands. 
+
+At the same time the article details Prof. Li's approach to using Amazon Mechanical Turk in a way that highlights a 
+hierarchy of labor-types, as well as some biases against certain types of workers. The categorization of images, for 
+example, would be considered "menial" labor done by "unskilled" workers, and as the article shows, it is subject to 
+questioning. Dr. Li's concerns about whether or not online workers would take the work seriously are certainly important in the 
+context of collecting accurate data, and there is nothing wrong with implementing a control group to ensure that the 
+information she collects is of good quality. However, in the attempt to "factor in the workers' likely biases," 
+we can see some personal assumptions at play about the integrity of these labourers and their work ethic. 
+
+The hierarchy of labor, which places menial tasks like image-labelling at near-bottom is also responsible for devaluing 
+this work. I am aware that Amazon Mechanical Turk has been the subject of some controversy, given that workers are often
+offered very low pay offered as compensation. The lack of protection for these workers, who are technically 'contractors'
+rather than employees, also means that the fame and success of those who outsource time-intensive tasks is built on the 
+precarity of less visible laborers, whose contributions are essential but systematically undervalued.
+
+I'm not arguing here that expertise does not deserve rightful credit and compensation, especially since it takes alot of 
+time and labor to accumulate knowledge and skillsets. However, recognition and compensation of expertise shouldn't come at 
+the expense of the less-visible workers who are essential to the success of large-scale projects like ImageNet.
+
 ```
