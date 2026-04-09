@@ -235,6 +235,7 @@ DROP TABLE IF EXISTS temp.product_units;
 CREATE TEMP TABLE product_units AS
 	SELECT *
 	,CURRENT_TIMESTAMP AS snapshot_timestamp
+	
 	FROM product
 	WHERE product_qty_type = 'unit';
 	
@@ -248,11 +249,16 @@ FROM temp.product_units
 This can be any product you desire (e.g. add another record for Apple Pie). */
 --QUERY 10
 
-INSERT INTO product_units
-VALUES(24,'Blueberry Pie', '10"', 3, 'unit', CURRENT_TIMESTAMP);
+INSERT INTO product_units 
+	SELECT *
+	,CURRENT_TIMESTAMP
+	
+	FROM product
+	WHERE product_name = 'Apple Pie';
 
 SELECT *
 FROM product_units
+
 
 --END QUERY
 
@@ -264,11 +270,15 @@ HINT: If you don't specify a WHERE clause, you are going to have a bad time.*/
 --QUERY 11
 
 DELETE FROM product_units
-WHERE product_id = 24;
+WHERE product_name = 'Apple Pie' 
+	AND snapshot_timestamp < 
+		(SELECT 
+		MAX(snapshot_timestamp)
+		FROM product_units
+		WHERE product_name = 'Apple Pie');
 
 SELECT * 
 FROM product_units
-
 
 
 --END QUERY
