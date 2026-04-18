@@ -209,5 +209,30 @@ Consider, for example, concepts of fariness, inequality, social structures, marg
 
 
 ```
-Your thoughts...
+As I read the article, I realized that I have encountered friction when interacting with databases. It makes sense that
+databases are encoded in ways that reflect a society's values and ways of living, which means that those who most conform to
+society's rules receive easiest access to services by virtue of fitting into the right categories. Those who don't fit into
+predefined and accepted categories face greater friction when trying to access such services. While I am fortunate enough to
+not face very serious issues (like being denied access to identification, for example), databases have still caused some problems in my day-to-day life.
+
+My full legal name, which includes my Chinese name, has caused friction in the past when I tried to create profiles and
+accounts with institutions like schools and credit agencies etc. In the Western world, naming conventions commonly include
+categories of "first name" and "last name" (and sometimes "middle name"). It seems to be assumed that each name is a single
+word, that is, a string without spaces. Unfortunately, my first name contains 3 separate 'words' (with my English name coming
+last). As a result, I appear in many institutional databases simply under my last name and the the first character (the first
+'word') of my Chinese name, even when I try to input my full name when creating my profile. Unfortunately, it is also common
+for Chinese families to follow a pattern in naming their children and I share the first character of my Chinese name with my
+sister, whose name faces similar treatment in various databases. As such, it seems that my sister and I are barely
+distinguishable from each other as legal and financial entities.
+
+Western naming conventions are assumptions that have been encoded into databases, and though this seems like a minor issue, it
+can lead to major problems. In my case, the problem came to light when my sister and I attempted to rent an apartment together.
+Because we shared the same address for the vast majority of our lives, our credit profiles were mixed/spliced together by
+TransUnion, and all our individual financial accounts appeared under my name (or rather, the partial version of my name that
+was stored in their database). According to TransUnion, my sister did not exist. Although we called them and attempted to fix
+the problem by explaining that we two different individuals, in a country that relies so heavily on credit profiles and credit
+scores to gain access to financial products like mortgages, this experience has remained a worry at the back of my mind. It has
+shown to me how databases and their design can encode assumptions and values that results in individuals having
+unequal access to government and financial services.
+
 ```
